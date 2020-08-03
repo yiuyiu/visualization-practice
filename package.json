@@ -4,17 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "chart": "parcel Bar-Pie-Chart/src/index.html"
+    "chart": "parcel Bar-Pie-Chart/src/index.html",
+    "d3": "parcel d3/src/index.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/d3-hierarchy": "^1.1.6",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "d3-hierarchy": "^1.1.9",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.1"
