@@ -14,12 +14,7 @@ function draw(
 ) {
   const children = node.children;
   const { x, y, r } = node;
-  if (!children && isInCircle(x, y, r, currentXY)) {
-    highlightCircle = {
-      x,
-      y,
-      r,
-    };
+  if (!children && x == highlightCircle.x && y == highlightCircle.y) {
     ctx.fillStyle = "pink";
   } else {
     ctx.fillStyle = fillStyle;
@@ -34,7 +29,7 @@ function draw(
   } else {
     const name = node.data.name;
     ctx.fillStyle = textColor;
-    ctx.font = "1.5rem Arial";
+    ctx.font = "10px Arial";
     ctx.textAlign = "center";
     ctx.fillText(name, x, y);
     if (!circles[`${x},${y}`]) {
@@ -51,17 +46,33 @@ const isInCircle = (x, y, r, xy) => {
     .hierarchy(data)
     .sum((d) => 1)
     .sort((a, b) => b.value - a.value);
-  const pack = d3.pack().size([1600, 1600]).padding(3);
+  const pack = d3.pack().size([800, 800]).padding(3);
   const root = pack(regions);
   draw(context, root, []);
+  console.log(circles);
   canvas.addEventListener("mousemove", (e) => {
     currentXY = [e.clientX, e.clientY];
-    const { x, y, r } = highlightCircle;
-    Object.keys(circles).forEach((xAndY) => {
-      const [x, y] = xAndY.split(",");
+    let newHighlightCircle = { x: 0, y: 0, r: 0 };
+    const xAndY = Object.keys(circles).find((xAndY) => {
+      const [centerX, centerY] = xAndY.split(",");
+      return isInCircle(+centerX, +centerY, circles[xAndY], currentXY);
     });
-    if (x > 0 && !isInCircle(x, y, r, currentXY)) {
-      context.clearRect(0, 0, 1600, 1600);
+    if (xAndY) {
+      const [centerX, centerY] = xAndY.split(",");
+      newHighlightCircle = {
+        x: +centerX,
+        y: +centerY,
+        r: circles[xAndY],
+      };
+    }
+    if (
+      newHighlightCircle.x > 0 &&
+      `${newHighlightCircle.x},${newHighlightCircle.y}` !=
+        `${highlightCircle.x},${highlightCircle.y}`
+    ) {
+      console.log(newHighlightCircle);
+      highlightCircle = newHighlightCircle;
+      context.clearRect(0, 0, 800, 800);
       draw(context, root, currentXY);
     }
   });
