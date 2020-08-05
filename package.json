@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "chart": "parcel Bar-Pie-Chart/src/index.html",
-    "d3": "parcel d3/src/index.html"
+    "d3": "parcel d3/src/index.html",
+    "d3svg": "parcel d3SVG/src/index.html",
+    "webgl": "parcel webgl/src/hello.html"
   },
   "keywords": [],
   "author": "",

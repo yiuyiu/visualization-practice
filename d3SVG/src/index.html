@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hierarchy render by canvas</title>
+    <style>
+      h1 {
+        position: absolute;
+        width: 800px;
+        text-align: center;
+      }
+      circle {
+        fill: rgba(0, 0, 0, 0.2);
+        transition: all;
+      }
+      circle:hover {
+        fill: rgba(0, 128, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title"></h1>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      width="800"
+      height="800"
+      viewBox="0 0 1600 1600"
+    ></svg>
+
+    <script src="./index.ts"></script>
+  </body>
+</html>
