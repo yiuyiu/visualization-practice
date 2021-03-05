@@ -7,8 +7,11 @@
     "chart": "parcel Bar-Pie-Chart/src/index.html",
     "d3": "parcel d3/src/index.html",
     "d3svg": "parcel d3SVG/src/index.html",
-    "webgl": "parcel webgl/src/hello.html",
-    "vectortree": "parcel webgl/src/vector-tree.html"
+    "webgl2": "parcel webgl/src/hello.html",
+    "vectortree": "parcel webgl/src/vector-tree.html",
+    "cgc2": "parcel cg/chap2/*.html",
+    "cgc3": "parcel cg/chap3/*.html",
+    "webgl": "parcel webgl/src/*.html"
   },
   "keywords": [],
   "author": "",

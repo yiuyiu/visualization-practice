@@ -1,24 +1,18 @@
-const position = [
-    0.0, 0.0,
-    1.0, 0.0,
-    0, 0.5,
-    0.0, 0.5,
-    1.0, 0.0,
-    1.0, 0.5];
-var r1 = Math.random();
-var b1 = Math.random();
-var g1 = Math.random();
-var r2 = Math.random();
-var b2 = Math.random();
-var g2 = Math.random();
-const colors = [
-    r1,b1,g1,
-    r1,b1,g1,
-    r1,b1,g1,
-    r2,b2,g2,
-    r2,b2,g2,
-    r2,b2,g2
-]
+const positions = [
+    ...[0.25, 0.5, 0.75, 1, 0, -0.25, -0.5, -0.75, -1].map(item => ([item, -1, item, 1])).flat(),
+    ...[0.25, 0.5, 0.75, 0, 1, -0.25, -0.5, -0.75, -1].map(item => ([-1, item, 1, item])).flat()];
+
+function rotate(angleInRadians: number) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+        c, -s, 0,
+        s, c, 0,
+        0, 0, 1,
+    ];
+};
+const rangeEle = document.querySelector('#range') as HTMLInputElement;
+let rotationMatrixLocation: WebGLUniformLocation = 0;
 function initWebGL(): WebGLRenderingContext {
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     const gl = canvas.getContext('webgl');
@@ -41,26 +35,37 @@ function initShader(gl: WebGLRenderingContext) {
     console.log(gl.getProgramInfoLog(program));
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(position), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     const xixiLocation = gl.getAttribLocation(program, 'a_xixi');
     gl.enableVertexAttribArray(xixiLocation);
     gl.vertexAttribPointer(xixiLocation, 2, gl.FLOAT, false, 0, 0);
 
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-    const colorLocation = gl.getAttribLocation(program, 'a_color');
-    gl.enableVertexAttribArray(colorLocation);
-    gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 0, 0);
+    const uColorLocation = gl.getUniformLocation(program, 'v_color');
+
     gl.useProgram(program);
+    gl.uniform4fv(uColorLocation, [0, 0, 0, 1]);
+
+    const uMatrixLocation = gl.getUniformLocation(program, 'u_matrix');
+    rotationMatrixLocation = uMatrixLocation;
 }
 function draw(gl: WebGLRenderingContext) {
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    const theta = rangeEle.value;
+    // const theta = 360;
+    gl.uniformMatrix3fv(rotationMatrixLocation, false, rotate(+theta / 180 * Math.PI));
+    gl.drawArrays(gl.LINES, 0, 36);
 }
 function init() {
     const gl = initWebGL();
     initShader(gl);
+    // draw(gl);
+    // rangeEle.addEventListener('change',(e)=>{
+    //     draw(gl);
+    // })
+    rangeEle.addEventListener('mousemove', e => {
+        draw(gl);
+    })
     draw(gl);
 }
 init();
+export { }
